@@ -15,7 +15,12 @@ const App = () => {
 	const [notifMessage, setNotifMessege] = useState([null, ''])
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs))
+		const setingBlog = async () => {
+			const blogsInDB = await blogService.getAll()
+			const orderBlogs = blogsInDB.sort((a, b) => a.likes > b.likes ? -1 : 1)
+			setBlogs(orderBlogs)
+		}
+		setingBlog()
 	}, [])
 
 	useEffect(() => {
@@ -75,6 +80,24 @@ const App = () => {
 		}
 	}
 
+	const addLike = async (blog) => {
+		const blogToUp = {
+			user: blog.user.id,
+			likes: blog.likes + 1,
+			author: blog.author,
+			title: blog.title,
+			url: blog.url
+		}
+		try {
+			const response = await blogService.update(blog.id, blogToUp)
+			const blogAdded = blogs.map(blogInList => blogInList.id !== blog.id ? blogInList : response)
+			const orderBlogs = blogAdded.sort((a, b) => a.likes > b.likes ? -1 : 1)
+			setBlogs(orderBlogs)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	if (user === null) {
 		return (
 			<div>
@@ -115,7 +138,7 @@ const App = () => {
 				<BlogForm addBlog={addBlog} />
 			</Togglable>
 			{blogs.map((blog) => (
-				<Blog key={blog.id} blog={blog} />
+				<Blog key={blog.id} blog={blog} addLike={addLike} />
 			))}
 		</div>
 	)

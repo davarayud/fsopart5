@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import blogServices from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike }) => {
 	const [view, setView] = useState(false)
 	const hide = { display: view ? 'none' : '' }
 	const show = { display: view ? '' : 'none' }
@@ -17,7 +18,7 @@ const Blog = ({ blog }) => {
 				<br />
 				{blog.url}
 				<br />
-				Likes: {blog.likes} <button>like</button>
+				Likes: {blog.likes} <button onClick={() => addLike(blog)}>like</button>
 				<br />
 				{blog.user.name}
 			</div>
