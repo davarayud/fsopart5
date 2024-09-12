@@ -6,11 +6,10 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import './style.css'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notifMessage, setNotifMessege] = useState([null, ''])
 
@@ -39,16 +38,12 @@ const App = () => {
     }, 5000)
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
+  const logger = async (userObj) => {
     try {
-      const userLog = await loginService.login({ username, password })
+      const userLog = await loginService.login(userObj)
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(userLog))
       setUser(userLog)
       blogService.setToken(userLog.token)
-      setUsername('')
-      setPassword('')
       setNotifObjet([
         `Hi ${userLog.name}, Welcome to blog application!`,
         'good',
@@ -120,27 +115,7 @@ const App = () => {
       <div>
         <h1>Log in to application</h1>
         <Notification notifObjet={notifMessage} />
-        <form onSubmit={handleLogin}>
-          <div>
-            Username:{' '}
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            Password:{' '}
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">Login</button>
-        </form>
+        <LoginForm logger={logger}></LoginForm>
       </div>
     )
   }
