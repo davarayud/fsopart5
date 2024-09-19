@@ -23,23 +23,21 @@ describe('<Blog/>', () => {
   })
 
   test('At startup shows title and author but does not show url and likes', () => {
-    const divShortInfo = container.querySelector('.short-info')
-    const divAllInfo = container.querySelector('.all-info')
+    const div = container.querySelector('.short-info')
+ 
+    expect(div).toHaveTextContent('titulo del blog')
+    expect(div).toHaveTextContent('autor del blog')
 
-    expect(divShortInfo).toHaveTextContent('titulo del blog')
-    expect(divShortInfo).toHaveTextContent('autor del blog')
-
-    expect(divAllInfo).toHaveTextContent('http://www.url.com')
-    expect(divAllInfo).toHaveTextContent(0)
-    expect(divAllInfo).toHaveStyle('display: none')
+    expect(div).not.toHaveTextContent('http://www.url.com')
+    expect(div).not.toHaveTextContent(0)
   })
 
   test('After clicking the button, url and likes are displayed', async () => {
     const user = userEvent.setup()
     const button = screen.getByText('view')
     await user.click(button)
-    const divAllInfo = container.querySelector('.all-info')
-    expect(divAllInfo).not.toHaveStyle('display: none')
+    const div = container.querySelector('.short-info')
+    expect(div).not.toHaveStyle('display: none')
   })
 
   test('Clicking the button 2 times activates the event handler 2 times', async () => {
