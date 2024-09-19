@@ -138,6 +138,8 @@ const App = () => {
           deleteBlog={deleteBlog}
         />
       ))}
+      { blogs.length === 0 &&
+      <h3>Here will be shown the added blogs</h3>}
     </div>
   )
 }
