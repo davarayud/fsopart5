@@ -1,6 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { loginWhith, createBlog, clickLike } = require('./helper')
-const { getByRole } = require('@testing-library/react')
 
 describe('Blog app', () => {
   const validUser = {
